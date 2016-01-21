@@ -60,6 +60,7 @@ private:
     //dispatching to be sure we retrieve all the informations
     reco::MET corrMET = corrector.getCorrectedMET(srcMET, evt, es);
     pat::MET outMET(corrMET, srcMET);
+    outMET.setSignificanceMatrix(srcMET.getSignificanceMatrix());
   
     std::auto_ptr<METCollection> product(new METCollection);
     product->push_back(outMET);
