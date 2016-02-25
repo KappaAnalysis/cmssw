@@ -30,5 +30,6 @@ def loadLocalSqlite(process, sqliteFilename, tag = 'JetCorrectorParametersCollec
       jetSource = cms.InputTag("slimmedJets"),
       jetCorrFactorsSource = cms.VInputTag(cms.InputTag("patJetCorrFactorsReapplyJEC"))
       )
-    process.p = cms.Path() 
+    if( not hasattr(process, "p")):
+        process.p = cms.Path() 
     process.p += cms.Sequence( process.patJetCorrFactorsReapplyJEC + process. patJetsReapplyJEC )

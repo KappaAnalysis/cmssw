@@ -53,7 +53,9 @@ def runMVAMET(process,
 
      ## create the Path
     process.jmfw_analyzers = cms.Sequence()
-    process.p = cms.Path(process.jmfw_analyzers)
+    if( not hasattr(process, "p")):
+        process.p = cms.Path()
+    process.p += process.jmfw_analyzers
     # additional contribution from hadronically decaying taus
     from RecoMET.METPUSubtraction.tausSignificance import tausSignificance, tauMET, tauPFMET, tauDecayProducts
     process.tausSignificance = tausSignificance
