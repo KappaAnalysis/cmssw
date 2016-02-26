@@ -89,7 +89,7 @@
 			"recoilpatpfPUCorrectedMET_Pt",
 			"recoilpatpfPUCorrectedMET_Phi",
 			"Jet0_Pt", "Jet0_Eta", "Jet0_Phi",
-			"Jet0_Pt", "Jet0_Eta", "Jet1_Phi",
+			"Jet1_Pt", "Jet1_Eta", "Jet1_Phi",
 			"NCleanedJets",
 			"NVertex"
 				]
