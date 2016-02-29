@@ -9,6 +9,7 @@ options.register ('globalTag',"76X_mcRun2_asymptotic_v12",VarParsing.multiplicit
 options.register ('saveMapForTraining',  False,VarParsing.multiplicity.singleton, VarParsing.varType.bool, 'save internal map from MVAMET to perform own training');
 options.register ('inputFile', 'root://xrootd.unl.edu//store/mc/RunIIFall15MiniAODv2/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/70000/0232D37A-77BA-E511-B3C5-0CC47A4C8EA8.root', VarParsing.multiplicity.singleton, VarParsing.varType.string, "Path to a testfile")
 options.register ("localSqlite", '', VarParsing.multiplicity.singleton, VarParsing.varType.string, "Path to a local sqlite file")
+options.register ("reapplyJEC", True, VarParsing.multiplicity.singleton, VarParsing.varType.bool, "Reapply JEC to Jets")
 options.parseArguments()
 
 process = cms.Process("MVAMET")
@@ -19,11 +20,16 @@ process.load('Configuration.StandardSequences.MagneticField_38T_cff')
 if (options.localSqlite == ''):
     process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
     process.GlobalTag.globaltag = options.globalTag
-    jetCollection = "slimmedJets"
 else:
     from RecoMET.METPUSubtraction.localSqlite import loadLocalSqlite
     loadLocalSqlite(process, options.localSqlite) 
+
+
+if options.reapplyJEC:
+    from RecoMET.METPUSubtraction.localSqlite import recorrectJets
+    recorrectJets(process)
     jetCollection = "patJetsReapplyJEC"
+
 
 # configure MVA MET
 runMVAMET( process, jetCollectionPF = jetCollection)

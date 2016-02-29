@@ -1,7 +1,8 @@
 import FWCore.ParameterSet.Config as cms
+from CondCore.DBCommon.CondDBSetup_cfi import *
+
 def loadLocalSqlite(process, sqliteFilename, tag = 'JetCorrectorParametersCollection_Fall15_25nsV2_MC_AK4PFchs'):
     process.load("CondCore.DBCommon.CondDBCommon_cfi")
-    from CondCore.DBCommon.CondDBSetup_cfi import *
     process.jec = cms.ESSource("PoolDBESSource",
           DBParameters = cms.PSet(
             messageLevel = cms.untracked.int32(0)
@@ -18,13 +19,14 @@ def loadLocalSqlite(process, sqliteFilename, tag = 'JetCorrectorParametersCollec
     )
     ## add an es_prefer statement to resolve a possible conflict from simultaneous connection to a global tag
     process.es_prefer_jec = cms.ESPrefer('PoolDBESSource','jec')
+
+def recorrectJets(process):
     ## https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookJetEnergyCorrections#CorrPatJets
     from PhysicsTools.PatAlgos.producersLayer1.jetUpdater_cff import patJetCorrFactorsUpdated
     process.patJetCorrFactorsReapplyJEC = patJetCorrFactorsUpdated.clone(
     src = cms.InputTag("slimmedJets"),
       levels = ['L1FastJet', 'L2Relative', 'L3Absolute'],
       payload = 'AK4PFchs' ) # Make sure to choose the appropriate levels and payload here!
-  
     from PhysicsTools.PatAlgos.producersLayer1.jetUpdater_cff import patJetsUpdated
     process.patJetsReapplyJEC = patJetsUpdated.clone(
       jetSource = cms.InputTag("slimmedJets"),
