@@ -33,7 +33,7 @@ def recorrectJets(process, isData = False):
       jetCorrFactorsSource = cms.VInputTag(cms.InputTag("patJetCorrFactorsReapplyJEC"))
       )
     if(isData):
-        process.patJetCorrFactorsReapplyJEC.levels = ['L1FastJet', 'L2L3Residual']
+        process.patJetCorrFactorsReapplyJEC.levels = ['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual']
     if( not hasattr(process, "p")):
         process.p = cms.Path() 
     process.p += cms.Sequence( process.patJetCorrFactorsReapplyJEC + process. patJetsReapplyJEC )
